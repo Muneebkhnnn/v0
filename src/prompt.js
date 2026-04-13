@@ -80,7 +80,9 @@ Additional Guidelines:
 - You MUST use the terminal tool to install any packages
 - Do not print code inline
 - Do not wrap code in backticks
-- Use backticks (\`) for all strings to support embedded quotes safely.
+- Use regular double quotes for all JSX attribute values — NEVER use backtick template literals for static JSX attributes like className, id, or type.
+- Only use backtick template literals inside JavaScript expressions, for example: className={cn(\`some-class \${variable}\`)}
+- Use backticks (\`) for all non-JSX strings to support embedded quotes safely.
 - Do not assume existing file contents — use readFiles if unsure
 - Do not include any commentary, explanation, or markdown — use only tool outputs
 - Always build full, real-world features or screens — not demos, stubs, or isolated widgets
