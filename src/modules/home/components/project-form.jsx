@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { useCreateProject } from "@/modules/projects/hooks/project";
+import { useUser } from '@clerk/nextjs';
 
 const formSchema = z.object({
   content: z
@@ -74,8 +75,8 @@ const PROJECT_TEMPLATES = [
 const ProjectForm = () => {
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
-  
-  const { mutateAsync,isPending } = useCreateProject();
+
+  const { mutateAsync, isPending } = useCreateProject();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -89,20 +90,28 @@ const ProjectForm = () => {
     form.setValue("content", prompt);
   };
 
+  const { isLoaded, isSignedIn, user } = useUser();
+
   const onSubmit = async (values) => {
     // add a feature that allow creating a project without signing in, but with limitations that is only 3 time
     try {
+      if (!isLoaded || !isSignedIn) {
+        toast.error("You must be signed in to create a project");
+        return;
+      }
       console.log("Submitting project with content:", values);
       const res = await mutateAsync(values.content);
       router.push(`/projects/${res.id}`);
       toast.success("Project created successfully");
       form.reset();
     } catch (error) {
+      console.log("Error creating project:", error);
       toast.error(error.message || "Failed to create project");
     }
   };
 
   const isButtonDisabled = isPending || !form.watch("content").trim();
+
 
   return (
     <div className="space-y-8">
