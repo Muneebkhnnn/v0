@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createMessages, getMessages } from "../actions";
 
 // Prefetch messages for a project to improve perceived performance when the user navigates to the messages view
+/* prefetchMessages loads messages into the React Query cache before the user opens the messages view. Then useGetMessages reads that same cached data immediately because it uses the same query key. */
+
 export const prefetchMessages = async (queryClient, projectId) => {
   await queryClient.prefetchQuery({
     queryKey: ["messages", projectId],

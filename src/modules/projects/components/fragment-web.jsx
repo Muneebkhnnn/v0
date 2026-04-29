@@ -8,7 +8,7 @@ const FragmentWeb = ({ data }) => {
   const [copied, setCopied] = useState(false);
 
   const onRefresh = () => {
-    setFragmentKey((prev) => prev + 1);
+    setFragmentKey((prev) => prev + 1); // Increment the key to force the iframe to reload
   };
 
   const handleCopy = () => {
@@ -58,7 +58,7 @@ const FragmentWeb = ({ data }) => {
         className="h-full w-full"
         sandbox="allow-scripts allow-same-origin allow-scripts"
         loading="lazy"
-        src={data.sandboxUrl}
+        src={data.sandboxUrl} // Use the sandboxUrl from data to load the iframe
       />
     </div>
   );

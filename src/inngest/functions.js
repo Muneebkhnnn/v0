@@ -9,7 +9,7 @@ import {
   createState,
 } from "@inngest/agent-kit";
 
-import z, { json } from "zod";
+import z from "zod";
 import { FRAGMENT_TITLE_PROMPT, PROMPT, RESPONSE_PROMPT } from "../prompt";
 import { lastAssistantTextMessageContent } from "./utils";
 import db from "../lib/db";

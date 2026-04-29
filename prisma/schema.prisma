@@ -26,12 +26,13 @@ model User {
 model Project {
   id  String @id @default(uuid())
   name String
-  userId String
-  user User @relation(fields: [userId], references: [id] , onDelete: Cascade)
+  userId String // foreign key to User
+  user User @relation(fields: [userId], references: [id] , onDelete: Cascade) //The user field is just Prisma's virtual relation (not a real column)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  messages Message[]
+  messages Message[] //messages Message[] is also virtual — it's not stored in this table at all. The actual data lives in the Message table
+  //So the messages Message[] line in your schema is basically telling Prisma "hey, a Project has many Messages, let me navigate that relationship easily" — under the hood it still runs a JOIN or a second query, but you don't have to think about it.
 }
 
 enum MessageRole {

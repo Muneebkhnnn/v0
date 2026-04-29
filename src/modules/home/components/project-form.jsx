@@ -83,7 +83,7 @@ const ProjectForm = () => {
     defaultValues: {
       content: "",
     },
-    mode: "onChange",
+    mode: "onChange", // Validate on change to enable/disable the submit button based on form validity
   });
 
   const handleTemplate = (prompt) => {
@@ -159,15 +159,34 @@ const ProjectForm = () => {
           )}
         >
           <FormField
+            // This comes from useForm()
+            // It lets FormField register and manage this input  
+            // Without this → your form won’t track this field
             control={form.control}
             name="content"
             render={({ field }) => (
               <TextAreaAutosize
+                /* This is where you define your custom UI
+                field contains:
+                value
+                onChange
+                onBlur
+                ref
+                */
+
+               /* {...field} This spreads:
+
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                ref={field.ref}
+
+                👉 Without this → input won’t sync with form */
                 {...field}
                 disabled={isPending}
                 placeholder="Describe what you want to create..."
                 onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
+                onBlur={() => setIsFocused(false)} // disble focus state when user clicks outside the textarea
                 minRows={3}
                 maxRows={8}
                 className={cn(
@@ -175,7 +194,7 @@ const ProjectForm = () => {
                   isPending && "opacity-50"
                 )}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                  if (e.key === "Enter") {
                     e.preventDefault();
                     form.handleSubmit(onSubmit)(e);
                   }
